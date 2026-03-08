@@ -99,6 +99,11 @@
           document.querySelectorAll('.preset').forEach(function (b) { b.classList.remove('selected'); });
           this.classList.add('selected');
           showQrForSelected();
+          var url = this.getAttribute('data-url') || '';
+          if (url) {
+            if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+            window.open(url, '_blank', 'noopener,noreferrer');
+          }
         });
       });
 
