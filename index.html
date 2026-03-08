@@ -21,8 +21,10 @@
       <div class="social-presets">
         <button type="button" class="preset preset-fb" data-url="https://www.facebook.com/profile.php?id=61580305498471" title="Facebook">Facebook</button>
         <button type="button" class="preset preset-ig selected" data-url="https://www.instagram.com/edusphereacademy_?igsh=MWkwOXU4c3dqOTBtdw==" title="Instagram">Instagram</button>
-        <button type="button" class="preset preset-wa" data-url="wa.me/919409080990" title="WhatsApp">WhatsApp</button>
+        <button type="button" class="preset preset-wa" data-url="https://wa.me/919409080990" title="WhatsApp">WhatsApp</button>
+        <button type="button" class="preset preset-address" data-url="https://maps.app.goo.gl/BkmAUgxFt6Zz17Yb9" title="Location">Location</button>
       </div>
+      <button type="button" class="btn-open-social" id="btnOpenSocial">Open social</button>
     </form>
     <div id="result" class="result" hidden>
       <div class="qr-wrap" id="qrWrap">
@@ -71,8 +73,14 @@
         qrWrap.classList.add('qr-wrap--loading');
         qrLoading.setAttribute('aria-hidden', 'false');
         qrEl.classList.remove('qr-canvas--visible');
+        while (qrEl.firstChild) {
+          qrEl.removeChild(qrEl.firstChild);
+        }
         qrEl.innerHTML = '';
         setTimeout(function () {
+          while (qrEl.firstChild) {
+            qrEl.removeChild(qrEl.firstChild);
+          }
           if (typeof QRCode !== 'undefined') {
             new QRCode(qrEl, { text: url, width: 200, height: 200 });
           } else {
@@ -93,6 +101,18 @@
           showQrForSelected();
         });
       });
+
+      var btnOpenSocial = document.getElementById('btnOpenSocial');
+      if (btnOpenSocial) {
+        btnOpenSocial.addEventListener('click', function () {
+          var selected = document.querySelector('.preset.selected');
+          var url = selected ? selected.getAttribute('data-url') : '';
+          if (url) {
+            if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+            window.open(url, '_blank', 'noopener,noreferrer');
+          }
+        });
+      }
 
       showQrForSelected();
       requestAnimationFrame(function () {
