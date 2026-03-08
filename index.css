@@ -1,0 +1,416 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #1a1a1a;
+  background: #0f0f12;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: #1c1c22;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  transition: opacity 0.5s ease-out, transform 2s ease-out;
+}
+
+.card--entering {
+  opacity: 0;
+  transform: translateY(120px);
+}
+
+.card:not(.card--entering) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.profile {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.profile-photos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.profile-photo {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.profile-photo--logo {
+  flex-shrink: 0;
+}
+
+.profile-name {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #f0f0f0;
+}
+
+.hint {
+  margin: 0 0 1.25rem;
+  font-size: 0.9rem;
+  color: #8a8a9a;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.form label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #b0b0b8;
+}
+
+.form input {
+  padding: 0.65rem 0.85rem;
+  font-size: 1rem;
+  border: 1px solid #3a3a44;
+  border-radius: 8px;
+  background: #25252e;
+  color: #f0f0f0;
+}
+
+.form input::placeholder {
+  color: #5a5a68;
+}
+
+.form input:focus {
+  outline: none;
+  border-color: #5c7cfa;
+}
+
+.social-presets {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.preset {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.preset-fb {
+  background: #1877f2;
+}
+
+.preset-fb:hover {
+  background: #166fe5;
+}
+
+.preset-ig {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+.preset-ig:hover {
+  opacity: 0.9;
+}
+
+.preset-wa {
+  background: #25d366;
+}
+
+.preset-wa:hover {
+  background: #20bd5a;
+}
+
+.preset-address {
+  background: #5f6368;
+}
+
+.preset-address:hover {
+  background: #4a4d51;
+}
+
+.preset.selected {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+  outline: 2px solid #f0f0f0;
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .social-presets {
+    flex-direction: column;
+  }
+
+  .preset {
+    flex: none;
+    width: 100%;
+  }
+}
+
+.form button[type="submit"] {
+  margin-top: 0.25rem;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+  background: #5c7cfa;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.form button[type="submit"]:hover {
+  background: #4c6ce8;
+}
+
+.result {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #3a3a44;
+  animation: result-fade-in 0.35s ease-out;
+}
+
+@keyframes result-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.qr-wrap {
+  margin: 0 auto 1rem;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  width: fit-content;
+  position: relative;
+  min-width: 200px;
+  min-height: 200px;
+}
+
+.qr-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 8px;
+  pointer-events: none;
+  transition: opacity 0.2s ease-out;
+}
+
+.qr-loading[aria-hidden="true"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.qr-loading[aria-hidden="false"]::after {
+  content: "";
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #5c7cfa;
+  border-radius: 50%;
+  animation: qr-spin 0.7s linear infinite;
+}
+
+@keyframes qr-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.qr-canvas {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.qr-canvas--visible {
+  opacity: 1;
+}
+
+.qr-wrap img,
+.qr-wrap canvas {
+  display: block;
+}
+
+#qrcode {
+  min-width: 200px;
+  min-height: 200px;
+}
+
+#qrcode canvas {
+  width: 200px !important;
+  height: 200px !important;
+}
+
+.qr-fallback {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #e85d5d;
+}
+
+.result label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #b0b0b8;
+  margin-bottom: 0.5rem;
+}
+
+.link-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.link-row input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  border: 1px solid #3a3a44;
+  border-radius: 6px;
+  background: #25252e;
+  color: #f0f0f0;
+}
+
+.link-row button {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  color: #fff;
+  background: #3a3a44;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.link-row button:hover {
+  background: #4a4a54;
+}
+
+.result .small {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: #6a6a78;
+}
+
+.error {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: #e85d5d;
+}
+
+.btn-office {
+  display: block;
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #f0f0f0;
+  background: #3a3a44;
+  border: 1px solid #4a4a54;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-office:hover {
+  background: #4a4a54;
+  border-color: #5a5a64;
+}
+
+.office-details {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #3a3a44;
+  animation: office-fade-in 0.3s ease-out;
+}
+
+@keyframes office-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.office-photo {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.office-photo.office-logo {
+  max-width: 200px;
+  max-height: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  border-radius: 50%;
+}
+
+.office-info {
+  color: #b0b0b8;
+  font-size: 0.9rem;
+}
+
+.office-title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f0f0f0;
+}
+
+.office-text {
+  margin: 0 0 0.5rem;
+  line-height: 1.5;
+}
+
+.office-address {
+  margin: 0 0 0.75rem;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.office-map-link {
+  display: inline-block;
+  color: #5c7cfa;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.office-map-link:hover {
+  text-decoration: underline;
+}

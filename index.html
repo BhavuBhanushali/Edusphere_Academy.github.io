@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smit KhakhKhar/Edusphere Academy</title>
+  <link rel="stylesheet" href="index.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <main id="redirect-app" class="card card--entering">
+    <div class="profile">
+      <div class="profile-photos">
+        <img class="profile-photo" src="https://ui-avatars.com/api/?name=Smit+Khakhkhar&size=96&background=5c7cfa&color=fff" alt="">
+        <img class="profile-photo profile-photo--logo" src="public/smit-office-logo.jpg" alt="EDUSPHERE Academy">
+      </div>
+      <p class="profile-name">Smit Khakhkhar/Edusphere Academy</p>
+    </div>
+    <p class="hint">Choose a platform. Your QR will redirect to that link.</p>
+    <form id="edit-form" class="form">
+      <label>Redirect to</label>
+      <div class="social-presets">
+        <button type="button" class="preset preset-fb" data-url="https://www.facebook.com/profile.php?id=61580305498471" title="Facebook">Facebook</button>
+        <button type="button" class="preset preset-ig selected" data-url="https://www.instagram.com/edusphereacademy_?igsh=MWkwOXU4c3dqOTBtdw==" title="Instagram">Instagram</button>
+        <button type="button" class="preset preset-wa" data-url="wa.me/919409080990" title="WhatsApp">WhatsApp</button>
+      </div>
+    </form>
+    <div id="result" class="result" hidden>
+      <div class="qr-wrap" id="qrWrap">
+        <div class="qr-loading" id="qrLoading" aria-hidden="true"></div>
+        <div id="qrcode" class="qr-canvas"></div>
+      </div>
+    </div>
+    <p id="error" class="error" hidden></p>
+    <button type="button" class="btn-office" id="btnOffice">Office details & address</button>
+    <div class="office-details" id="officeDetails" hidden>
+      <img class="office-photo office-logo" src="public/smit-office-logo.jpg" alt="EDUSPHERE Academy – Office logo" onerror="this.style.display='none'">
+      <div class="office-info">
+        <h3 class="office-title">Edusphere Academy</h3>
+        <!-- <p class="office-text">Your office name or description here.</p> -->
+        <p class="office-address">Shop no. 12, Real Kedar Bhavan, Honey Park Rd, Opposite Sai Square Complex, Adajan Gam, Adajan, Surat, Gujarat 395009</p>
+        <a class="office-map-link" href="https://maps.app.goo.gl/BkmAUgxFt6Zz17Yb9" target="_blank" rel="noopener">Open in Google Maps</a>
+      </div>
+    </div>
+  </main>
+  <script>
+    (function () {
+      var hash = location.hash ? location.hash.slice(1) : '';
+      var decoded = '';
+      try {
+        decoded = decodeURIComponent(hash);
+      } catch (e) {
+        decoded = hash;
+      }
+      if (decoded && (decoded.startsWith('http://') || decoded.startsWith('https://'))) {
+        location.replace(decoded);
+        return;
+      }
+
+      var result = document.getElementById('result');
+      var errorEl = document.getElementById('error');
+
+      function showQrForSelected() {
+        var selected = document.querySelector('.preset.selected');
+        var url = selected ? selected.getAttribute('data-url') : '';
+        if (!url) return;
+        errorEl.hidden = true;
+        var qrWrap = document.getElementById('qrWrap');
+        var qrLoading = document.getElementById('qrLoading');
+        var qrEl = document.getElementById('qrcode');
+        result.hidden = false;
+        qrWrap.classList.add('qr-wrap--loading');
+        qrLoading.setAttribute('aria-hidden', 'false');
+        qrEl.classList.remove('qr-canvas--visible');
+        qrEl.innerHTML = '';
+        setTimeout(function () {
+          if (typeof QRCode !== 'undefined') {
+            new QRCode(qrEl, { text: url, width: 200, height: 200 });
+          } else {
+            qrEl.innerHTML = '<p class="qr-fallback">QR library not loaded. Check console.</p>';
+          }
+          qrWrap.classList.remove('qr-wrap--loading');
+          qrLoading.setAttribute('aria-hidden', 'true');
+          requestAnimationFrame(function () {
+            qrEl.classList.add('qr-canvas--visible');
+          });
+        }, 280);
+      }
+
+      document.querySelectorAll('.preset').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('.preset').forEach(function (b) { b.classList.remove('selected'); });
+          this.classList.add('selected');
+          showQrForSelected();
+        });
+      });
+
+      showQrForSelected();
+      requestAnimationFrame(function () {
+        document.body.classList.add('loaded');
+        document.getElementById('redirect-app').classList.remove('card--entering');
+      });
+
+      var btnOffice = document.getElementById('btnOffice');
+      var officeDetails = document.getElementById('officeDetails');
+      if (btnOffice && officeDetails) {
+        btnOffice.addEventListener('click', function () {
+          var isHidden = officeDetails.hidden;
+          officeDetails.hidden = !isHidden;
+          btnOffice.textContent = isHidden ? 'Hide office details' : 'Office details & address';
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
