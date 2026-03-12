@@ -24,7 +24,7 @@
         <button type="button" class="preset preset-wa" data-url="https://wa.me/919409080990" title="WhatsApp">WhatsApp</button>
         <button type="button" class="preset preset-address" data-url="https://maps.app.goo.gl/BkmAUgxFt6Zz17Yb9" title="Location">Location</button>
       </div>
-      <button type="button" class="btn-open-social" id="btnOpenSocial">Open social</button>
+      <!-- <button type="button" class="btn-open-social" id="btnOpenSocial">Open social</button> -->
     </form>
     <div id="result" class="result" hidden>
       <div class="qr-wrap" id="qrWrap">
@@ -69,7 +69,7 @@
         var qrWrap = document.getElementById('qrWrap');
         var qrLoading = document.getElementById('qrLoading');
         var qrEl = document.getElementById('qrcode');
-        result.hidden = false;
+        result.hidden = true;
         qrWrap.classList.add('qr-wrap--loading');
         qrLoading.setAttribute('aria-hidden', 'false');
         qrEl.classList.remove('qr-canvas--visible');
